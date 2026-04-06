@@ -13,7 +13,10 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ origin: 'https://global-handlooms-2k4t.vercel.app' }));
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://global-handlooms-2k4t.vercel.app'],
+    credentials: true,
+}));
 // INCREASED PAYLOAD LIMITS FOR WEB4 IMAGE UPLOADS
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
