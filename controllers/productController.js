@@ -56,7 +56,7 @@ export const createProduct = async (req, res, next) => {
                 ? materialsUsed
                 : (materialsUsed ? materialsUsed.split(',').map(s => s.trim()).filter(Boolean) : []),
             originRegion, inventory,
-            image: image || 'https://via.placeholder.com/400'
+            image: image || ''
         });
 
         res.status(201).json({ success: true, message: "Product created successfully", data: newProduct });

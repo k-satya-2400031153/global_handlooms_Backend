@@ -136,6 +136,8 @@ export const getMarketingAnalytics = async (req, res, next) => {
         // Revenue per product
         const productMap = {};
         orders.forEach(order => {
+            // Calculate total units in this order to distribute totalAmount proportionally
+            const totalUnits = order.products.reduce((s, i) => s + i.quantity, 0);
             order.products.forEach(item => {
                 const prod = item.productId;
                 if (!prod) return;
@@ -143,7 +145,11 @@ export const getMarketingAnalytics = async (req, res, next) => {
                 if (!productMap[id]) {
                     productMap[id] = { title: prod.title, region: prod.originRegion, revenue: 0, unitsSold: 0, buyers: new Set() };
                 }
-                productMap[id].revenue += (item.price || 0) * item.quantity;
+                // Revenue = this item's share of the order total (proportional by quantity)
+                const itemRevenue = totalUnits > 0
+                    ? (item.quantity / totalUnits) * order.totalAmount
+                    : 0;
+                productMap[id].revenue += itemRevenue;
                 productMap[id].unitsSold += item.quantity;
                 if (order.buyerId) productMap[id].buyers.add(order.buyerId.email || order.buyerId._id.toString());
             });

@@ -65,11 +65,16 @@ export const cancelOrder = async (req, res, next) => {
         if (order.buyerId.toString() !== req.user.id) {
             return res.status(401).json({ success: false, message: "Not authorized to cancel this transaction." });
         }
+        // Server-side guard: only allow cancellation of Pending or Processing orders
+        const cancellableStatuses = ['Pending', 'Processing'];
+        if (!cancellableStatuses.includes(order.status)) {
+            return res.status(400).json({ success: false, message: `Order cannot be cancelled — it is already ${order.status}.` });
+        }
         for (let item of order.products) {
             await Product.findByIdAndUpdate(item.productId, { $inc: { inventory: item.quantity } });
         }
         await Order.findByIdAndDelete(req.params.id);
-        res.status(200).json({ success: true, message: "Transaction Voided. Assets refunded to network." });
+        res.status(200).json({ success: true, message: "Order cancelled. Stock refunded." });
     } catch (error) {
         next(error);
     }
