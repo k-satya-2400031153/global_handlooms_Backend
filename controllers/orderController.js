@@ -101,13 +101,35 @@ export const updateOrderStatus = async (req, res, next) => {
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ success: false, message: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
         }
-        const order = await Order.findByIdAndUpdate(req.params.id, { status }, { returnDocument: 'after' });
+
+        const order = await Order.findById(req.params.id);
         if (!order) return res.status(404).json({ success: false, message: "Order not found." });
+
+        order.status = status;
+
+        // Write to trackingHistory so the logistics engine can time the next stage correctly
+        if (status !== 'Cancelled') {
+            const locationMap = {
+                'Processing':        'Artisan Hub (Admin Override)',
+                'Shipped':           'In Transit (Admin Override)',
+                'Out for Delivery':  'Local Delivery Hub (Admin Override)',
+                'Delivered':         'Delivered to Customer (Admin Override)',
+            };
+            order.trackingHistory.push({
+                status,
+                location: locationMap[status] || 'System Update',
+                timestamp: new Date(),
+            });
+        }
+
+        await order.save();
         res.status(200).json({ success: true, message: `Order updated to ${status}`, data: order });
     } catch (error) {
         next(error);
     }
 };
+
+
 
 // ADMIN: Toggle Auto-Fulfillment
 export const updateAutoFulfill = async (req, res, next) => {
