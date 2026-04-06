@@ -1,0 +1,33 @@
+### 1. Test Sending OTP
+POST http://localhost:5000/api/auth/send-otp
+Content-Type: application/json
+
+{
+  "email": "ksatyanarayana2006@gmail.com"
+}
+### 2. Test Verifying OTP and Logging In
+POST http://localhost:5000/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "email": "ksatyanarayana2006@gmail.com",
+  "otp": "544156",
+  "name": "Satya Artisan",
+  "role": "Artisan"
+}
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Y2M4Njc4YmY3MjQyNmFiZTlmMDAwZCIsImVtYWlsIjoia3NhdHlhbmFyYXlhbmEyMDA2QGdtYWlsLmNvbSIsInJvbGUiOiJBcnRpc2FuIiwiaWF0IjoxNzc1MDExNDQ4LCJleHAiOjE3NzUwOTc4NDh9.-_BCK1U-m_eyiq848DBsDGV4PlYQgP2LhYsUsqL59vA
+### 3. Test Creating a Product (Protected Route - Requires Token)
+POST http://localhost:5000/api/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Y2M4Njc4YmY3MjQyNmFiZTlmMDAwZCIsImVtYWlsIjoia3NhdHlhbmFyYXlhbmEyMDA2QGdtYWlsLmNvbSIsInJvbGUiOiJBcnRpc2FuIiwiaWF0IjoxNzc1MDExNDQ4LCJleHAiOjE3NzUwOTc4NDh9.-_BCK1U-m_eyiq848DBsDGV4PlYQgP2LhYsUsqL59vA
+
+
+{
+  "title": "Beautiful Silk Saree",
+  "description": "Handwoven pure silk saree from Varanasi.",
+  "price": 150.00,
+  "currency": "USD",
+  "inventory": 5,
+  "materialsUsed": ["Silk", "Natural Dyes"],
+  "originRegion": "Varanasi, India"
+}
