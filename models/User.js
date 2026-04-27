@@ -41,6 +41,8 @@ const userSchema = new mongoose.Schema({
     savedAddresses: [addressSchema],
     // Legacy field (kept for compatibility)
     shippingAddress: { type: String, trim: true },
+    // Password (bcrypt hashed). Optional — existing users get default; new users set their own.
+    password: { type: String, default: null },
     // Verification
     isVerified: { type: Boolean, default: false }
 }, { timestamps: true });

@@ -1,0 +1,26 @@
+{
+  "name": "global-handlooms-backend",
+  "version": "1.0.0",
+  "description": "Global Handlooms Node.js/Express backend API",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.3.3",
+    "nodemailer": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["handlooms", "ecommerce", "api"],
+  "author": "k-satya-2400031153",
+  "license": "ISC"
+}
