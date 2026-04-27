@@ -13,13 +13,15 @@ connectDB();
 
 const app = express();
 
-app.use(cors({
-    origin: ['http://localhost:5173', 'https://global-handlooms-2k4t.vercel.app'],
-    credentials: true,
-}));
+// CORS — open to all origins temporarily for deployment
+app.use(cors({ origin: '*', credentials: false }));
+
 // INCREASED PAYLOAD LIMITS FOR WEB4 IMAGE UPLOADS
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Health check — keeps Render from showing offline
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
@@ -34,4 +36,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     startLogisticsEngine();
-});
+});
